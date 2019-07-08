@@ -1,4 +1,5 @@
 import numpy as np 
+from numpy import random
 
 class LinearRegression:
     def __init__(self, epochs, learning_rate, verbose):
@@ -9,7 +10,7 @@ class LinearRegression:
         if verbose == None:
             self.verbose = False
         else:
-            self.verbose == verbose
+            self.verbose = verbose
     
     """
     Get the predicition of the linear regression model
@@ -54,9 +55,25 @@ class LinearRegression:
     Will print out training results every 10 epochs if verbose is True.
     """
     def fit(self, x, y):
+        # Initialize 0 weights and intercept as the number of columns in the data
+        self.w = np.zeros(len(x))
+        self.b = np.zeros(len(x))
         for epoch in range(self.epochs):
             self.update_weights(x,y)
             self.update_intercept(x,y)
             if self.verbose == True and epoch % 10 == 0:
                 print("epoch number: " + str(epoch) + " ran!")
                 print("MSE: " + str(self.mse(y, self.predict(x))))
+
+
+if __name__ == "__main__":
+    # Generate some fake data to pass into the learner
+    x1 = 3*random.normal(size=100)
+    x2 = 10*random.normal(size=100)
+    x3 = random.normal(size=100)
+    x = np.array([x1,x2,x3])
+    y = 2 + x1 + x2  + x3
+    print(y)
+    test = LinearRegression(epochs=50, learning_rate=0.2, verbose=True)
+    test.fit(x,y)
+    print(test.w, test.b)
