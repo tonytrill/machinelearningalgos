@@ -68,13 +68,18 @@ class LinearRegression:
     """
     This is the closed form solution of Linear Regression.
     y = wx
-    where x_0 = 1 for all instances.
+    y = w_0x_0 + w_1x1 + w_2x_2 + .....
+    where x_0 = 1 for all instances to get the intercept w_0 or b in our class.
+    weights = (X_tranposed * X)^-1 * (X_transposed * y)
     """
     def closed_form_solution(self, x, y):
         # Append a column of 1's to the data in order to get the intercept value!
         intercept = np.ones(shape=(x.shape[0], 1))
         x = np.append(intercept, x, axis=1)
-        return np.linalg.inv(x.T @ x) @ (x.T @ y)
+        # Closed form caluclation.
+        weights = np.linalg.inv(x.T @ x) @ (x.T @ y)
+        self.b = weights[0]
+        self.w = weights[1:]
 
 
 if __name__ == "__main__":
@@ -85,5 +90,6 @@ if __name__ == "__main__":
     y.shape = (y.shape[0], 1)
     random.seed(123)
     test = LinearRegression(epochs=10, learning_rate=.1, verbose=True)
-    print(test.closed_form_solution(x,y))
+    test.closed_form_solution(x,y)
+    print(test.w, test.b)
     #print(test.fit(x,y))
